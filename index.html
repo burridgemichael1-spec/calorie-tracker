@@ -11,8 +11,8 @@
       --bg:#0b0c10; --panel:#111318; --muted:#a6adbb; --text:#f6f7f9; --accent:#60a5fa; --danger:#ef4444;
       --radius:18px; --pad:14px; --tap:16px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{box-sizing:border-box; min-width:0}
+    html,body{height:100%; width:100%; overflow-x:hidden}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0b0c10,#0f1117);color:var(--text)}
     header{position:sticky;top:0;z-index:5;backdrop-filter:saturate(180%) blur(10px);background:rgba(17,19,24,.7);border-bottom:1px solid #1f2330}
     header .wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
@@ -21,8 +21,8 @@
 
     main{padding-bottom:86px}
 
-    .container{max-width:840px;margin:0 auto;padding:12px}
-    .card{background:var(--panel);border:1px solid #1f2330;border-radius:var(--radius);padding:var(--pad);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .container{max-width:840px;margin:0 auto;padding:12px; width:100%; overflow-x:hidden}
+    .card{background:var(--panel);border:1px solid #1f2330;border-radius:var(--radius);padding:var(--pad);box-shadow:0 10px 30px rgba(0,0,0,.25); overflow:hidden}
     .row{display:grid;gap:12px}
 
     .muted{color:var(--muted)}
@@ -38,7 +38,7 @@
     .btn:active{transform:translateY(1px)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
 
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
     .list{display:grid;gap:10px}
     .entry{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #23283a;border-radius:14px;background:#0f1420}
     .entry .meta{display:flex;flex-direction:column;gap:4px}
@@ -53,8 +53,8 @@
 
     /* Home progress */
     .progress-wrap{display:grid;grid-template-columns:1fr;gap:12px}
-    .progress-card{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
-    .progress-stats{display:grid;gap:8px}
+    .progress-card{display:grid;grid-template-columns:1fr;gap:16px;align-items:center}
+    .progress-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     .k{font-size:12px;color:var(--muted)}
     .v{font-size:22px;font-weight:800}
 
@@ -63,9 +63,18 @@
     .food-name{font-weight:700}
     .food-sub{font-size:12px;color:var(--muted)}
 
-    @media(min-width:700px){
-      .progress-card{grid-template-columns:320px 1fr}
+    /* Media queries */
+    @media(min-width:760px){
+      .progress-card{grid-template-columns:340px 1fr}
+      .progress-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
+    @media(max-width:560px){
+      .grid2{grid-template-columns:1fr}
+    }
+
+    /* Safe sizing for media & charts */
+    canvas{display:block;max-width:100%;width:100% !important}
+    video{display:block;max-width:100%;height:auto;border-radius:14px;border:1px solid #262b3c;background:#000}
   </style>
 </head>
 <body>
@@ -84,13 +93,13 @@
         <div class="row">
           <!-- Front-and-centre daily progress -->
           <div class="progress-card">
-            <canvas id="progressChart" height="180"></canvas>
+            <canvas id="progressChart" height="200"></canvas>
             <div class="progress-stats">
               <div><div class="k">Today</div><div class="v" id="todayTotal">0 kcal</div></div>
               <div><div class="k">Remaining</div><div class="v" id="todayRemaining">0 kcal</div></div>
               <div><div class="k">This week</div><div class="v" id="weekTotal">0 kcal</div></div>
               <div><div class="k">This month</div><div class="v" id="monthTotal">0 kcal</div></div>
-              <div class="grid2">
+              <div class="grid2" style="grid-column:1/-1">
                 <button class="btn green" id="addQuick">➕ Add</button>
                 <button class="btn" id="scanSwitch">📷 Scan</button>
               </div>
@@ -109,7 +118,7 @@
       <section id="screen-scan" class="card" aria-label="Barcode scanner" hidden>
         <div class="row">
           <div class="muted">Tip: if scanning fails, enter the barcode below.</div>
-          <video id="video" playsinline style="width:100%;border-radius:14px;border:1px solid #262b3c;background:#000;max-height:50vh"></video>
+          <video id="video" playsinline></video>
           <div class="grid2">
             <button class="btn accent" id="startScan">▶️ Start</button>
             <button class="btn" id="stopScan" disabled>⏹️ Stop</button>
@@ -166,7 +175,7 @@
             <button class="btn danger" id="clearAll">🗑️ Clear all data</button>
           </div>
           <div class="muted">About: data stays on your device. Barcode lookups use the free Open Food Facts API.</div>
-          <div class="muted">Version <span id="appVersion">1.1.0</span></div>
+          <div class="muted">Version <span id="appVersion">1.1.1</span></div>
         </div>
       </section>
 
@@ -425,11 +434,12 @@
 
   // ======= Charts =======
   let progressChart, calChart; let activeChartRange='day';
+  // Register center text plugin first
+  Chart.register({ id:'centerText', afterDraw(chart){ try{ const {ctx} = chart; const meta = chart.getDatasetMeta(0).data[0]; if(!meta) return; ctx.save(); ctx.font='700 22px system-ui'; ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle'; const total = chart.data.datasets[0].data[0]||0; ctx.fillText(`${Math.round(total)} kcal`, meta.x, meta.y); ctx.restore(); }catch(_){} }});
+
   function initProgressChart(){
     const ctx = document.getElementById('progressChart');
-    progressChart = new Chart(ctx, { type:'doughnut', data:{ labels:['Consumed','Remaining'], datasets:[{ data:[0, dailyGoal], borderWidth:0, cutout:'70%' }]}, options:{ plugins:{legend:{display:false}}, maintainAspectRatio:false } });
-    // Center text plugin
-    Chart.register({ id:'centerText', afterDraw(chart, args, opts){ const {ctx, chartArea:{width,height}} = chart; ctx.save(); ctx.font='700 22px system-ui'; ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle'; const total = chart.data.datasets[0].data[0]; ctx.fillText(`${Math.round(total)} kcal`, chart.getDatasetMeta(0).data[0].x, chart.getDatasetMeta(0).data[0].y); ctx.restore(); }});
+    progressChart = new Chart(ctx, { type:'doughnut', data:{ labels:['Consumed','Remaining'], datasets:[{ data:[0, dailyGoal], borderWidth:0, cutout:'70%' }]}, options:{ responsive:true, plugins:{legend:{display:false}}, maintainAspectRatio:false } });
   }
   function updateProgressChart(consumed, goal){
     if(!progressChart) return; const remaining = Math.max(goal - consumed, 0);
@@ -490,4 +500,3 @@
   </script>
 </body>
 </html>
-
