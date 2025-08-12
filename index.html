@@ -8,80 +8,70 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🍎</text></svg>">
   <style>
     :root{
-      --bg:#0b0c10; --panel:#111318; --muted:#9aa1ac; --text:#f6f7f9; --accent:#7dd3fc; --accent2:#34d399; --danger:#ef4444;
-      --radius:18px; --pad:14px;
+      --bg:#0b0c10; --panel:#111318; --muted:#a6adbb; --text:#f6f7f9; --accent:#60a5fa; --danger:#ef4444;
+      --radius:18px; --pad:14px; --tap:16px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0b0c10,#0f1117);color:var(--text)}
     header{position:sticky;top:0;z-index:5;backdrop-filter:saturate(180%) blur(10px);background:rgba(17,19,24,.7);border-bottom:1px solid #1f2330}
-    header .wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
+    header .wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
     header h1{font-size:18px;margin:0;display:flex;gap:10px;align-items:center}
-    header h1 span{font-weight:600}
     .goal{font-size:12px;color:var(--muted)}
 
-    main{padding-bottom:84px}
+    main{padding-bottom:86px}
 
-    .container{max-width:960px;margin:0 auto;padding:16px;}
+    .container{max-width:840px;margin:0 auto;padding:12px}
     .card{background:var(--panel);border:1px solid #1f2330;border-radius:var(--radius);padding:var(--pad);box-shadow:0 10px 30px rgba(0,0,0,.25)}
     .row{display:grid;gap:12px}
 
-    .pillbar{display:flex;gap:8px;flex-wrap:wrap}
-    .pill{border:1px solid #242836;background:#131620;color:var(--text);padding:8px 12px;border-radius:999px;font-size:13px;cursor:pointer}
-    .pill.active{background:linear-gradient(180deg,#111827,#0b1220);border-color:#2a3242;box-shadow:inset 0 0 0 1px #2a3242,0 0 0 1px #101522}
-
     .muted{color:var(--muted)}
-    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
-    input,select,button,textarea{font:inherit}
-    input[type="text"],input[type="number"],input[type="datetime-local"],textarea{width:100%;padding:12px 12px;border-radius:12px;border:1px solid #2a3242;background:#0e121b;color:var(--text)}
-    textarea{min-height:80px;resize:vertical}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 14px;border-radius:12px;border:1px solid #2a3242;background:#0e121b;color:var(--text);cursor:pointer}
+    label{font-size:14px;color:var(--muted);display:block;margin-bottom:6px}
+    input,button{font:inherit}
+    input[type="text"],input[type="number"],input[type="datetime-local"]{width:100%;padding:16px;border-radius:14px;border:1px solid #2a3242;background:#0e121b;color:var(--text);font-size:16px}
+
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;border-radius:14px;border:1px solid #2a3242;background:#0e121b;color:var(--text);cursor:pointer;font-weight:600}
     .btn.primary{background:linear-gradient(180deg,#1f2937,#111827);border-color:#2a3242}
-    .btn.accent{background:linear-gradient(180deg,#0ea5e9,#0284c7);border-color:#0891b2;color:white}
-    .btn.green{background:linear-gradient(180deg,#10b981,#059669);border-color:#047857;color:white}
-    .btn.danger{background:linear-gradient(180deg,#ef4444,#b91c1c);border-color:#7f1d1d;color:white}
+    .btn.accent{background:linear-gradient(180deg,#0ea5e9,#0284c7);border-color:#0891b2;color:#fff}
+    .btn.green{background:linear-gradient(180deg,#10b981,#059669);border-color:#047857;color:#fff}
+    .btn.danger{background:linear-gradient(180deg,#ef4444,#b91c1c);border-color:#7f1d1d;color:#fff}
+    .btn:active{transform:translateY(1px)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
 
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .list{display:grid;gap:10px}
     .entry{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #23283a;border-radius:14px;background:#0f1420}
-    .entry .meta{display:flex;flex-direction:column}
-    .entry .title{font-weight:600}
+    .entry .meta{display:flex;flex-direction:column;gap:4px}
+    .entry .title{font-weight:700;font-size:15px}
     .entry .sub{font-size:12px;color:var(--muted)}
-    .entry .cal{font-weight:700}
-
+    .entry .cal{font-weight:800}
     .empty{padding:18px;border:1px dashed #2a3242;border-radius:14px;text-align:center;color:var(--muted)}
 
     nav.bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(17,19,24,.9);backdrop-filter:saturate(180%) blur(10px);border-top:1px solid #1f2330;display:flex}
     nav.bottom button{flex:1;padding:10px 5px;background:transparent;border:0;color:var(--muted);font-size:12px;display:grid;gap:6px;place-items:center;cursor:pointer}
     nav.bottom button.active{color:var(--text)}
 
-    .scan-area{display:grid;gap:10px}
-    video{width:100%;border-radius:14px;border:1px solid #262b3c;background:#000;max-height:50vh}
-    .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:#192133;border:1px solid #2a3242;font-size:12px;color:var(--muted)}
+    /* Home progress */
+    .progress-wrap{display:grid;grid-template-columns:1fr;gap:12px}
+    .progress-card{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
+    .progress-stats{display:grid;gap:8px}
+    .k{font-size:12px;color:var(--muted)}
+    .v{font-size:22px;font-weight:800}
 
-    dialog{border:1px solid #2a3242;border-radius:16px;background:#0e121b;padding:0;color:var(--text)}
-    dialog .dlg{padding:16px}
-    dialog::backdrop{background:rgba(0,0,0,.55)}
+    /* Foods page */
+    .food-item{display:flex;align-items:center;justify-content:space-between;background:#0f1420;border:1px solid #23283a;border-radius:14px;padding:12px}
+    .food-name{font-weight:700}
+    .food-sub{font-size:12px;color:var(--muted)}
 
-    .top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-    .stat{background:#0f1420;border:1px solid #23283a;border-radius:14px;padding:12px}
-    .stat .k{font-size:12px;color:var(--muted)}
-    .stat .v{font-size:20px;font-weight:700}
-
-    .notice{border:1px solid #2a3242;border-radius:14px;background:#0f1420;padding:12px;color:var(--muted)}
-
-    @media(min-width:720px){
-      .grid2{grid-template-columns:2fr 1fr}
-      .top-stats{grid-template-columns:repeat(4,1fr)}
+    @media(min-width:700px){
+      .progress-card{grid-template-columns:320px 1fr}
     }
   </style>
 </head>
 <body>
   <header>
     <div class="wrap">
-      <h1>🍎 <span>Calorie Buddy</span></h1>
+      <h1>🍎 Calorie Buddy</h1>
       <div class="goal">Daily goal: <span id="dailyGoalLabel">2000</span> kcal</div>
     </div>
   </header>
@@ -89,67 +79,74 @@
   <main>
     <div class="container row">
 
-      <!-- Today & Log -->
-      <section id="screen-log" class="card" aria-label="Food log">
+      <!-- HOME -->
+      <section id="screen-home" class="card" aria-label="Home">
         <div class="row">
-          <div class="top-stats">
-            <div class="stat"><div class="k">Today</div><div class="v" id="todayTotal">0 kcal</div></div>
-            <div class="stat"><div class="k">Remaining</div><div class="v" id="todayRemaining">0 kcal</div></div>
-            <div class="stat"><div class="k">This week</div><div class="v" id="weekTotal">0 kcal</div></div>
-            <div class="stat"><div class="k">This month</div><div class="v" id="monthTotal">0 kcal</div></div>
-          </div>
-
-          <div class="pillbar">
-            <button class="pill active" data-range="today">Today</button>
-            <button class="pill" data-range="yesterday">Yesterday</button>
-            <button class="pill" data-range="7d">Last 7 days</button>
-            <button class="pill" data-range="30d">Last 30 days</button>
-          </div>
-
-          <div class="row">
-            <div id="logList" class="list"></div>
-            <div id="logEmpty" class="empty" hidden>No items logged yet. Tap <b>Add entry</b> or use the <b>Scan barcode</b> tab.</div>
-            <div class="grid3">
-              <button class="btn green" id="addQuick">➕ Add entry</button>
-              <button class="btn" id="addCustom">✍️ Manual calories</button>
-              <button class="btn" id="scanSwitch">📷 Scan barcode</button>
+          <!-- Front-and-centre daily progress -->
+          <div class="progress-card">
+            <canvas id="progressChart" height="180"></canvas>
+            <div class="progress-stats">
+              <div><div class="k">Today</div><div class="v" id="todayTotal">0 kcal</div></div>
+              <div><div class="k">Remaining</div><div class="v" id="todayRemaining">0 kcal</div></div>
+              <div><div class="k">This week</div><div class="v" id="weekTotal">0 kcal</div></div>
+              <div><div class="k">This month</div><div class="v" id="monthTotal">0 kcal</div></div>
+              <div class="grid2">
+                <button class="btn green" id="addQuick">➕ Add</button>
+                <button class="btn" id="scanSwitch">📷 Scan</button>
+              </div>
             </div>
+          </div>
+
+          <div>
+            <div style="font-weight:700;margin:2px 0 6px 0">Today's log</div>
+            <div id="logList" class="list"></div>
+            <div id="logEmpty" class="empty" hidden>No items today. Tap <b>Add</b> or <b>Scan</b>.</div>
           </div>
         </div>
       </section>
 
-      <!-- Scanner -->
+      <!-- SCAN -->
       <section id="screen-scan" class="card" aria-label="Barcode scanner" hidden>
-        <div class="row scan-area">
-          <div class="badge" id="cameraStatus">Camera: idle</div>
-          <video id="video" playsinline></video>
-          <div class="grid3">
+        <div class="row">
+          <div class="muted">Tip: if scanning fails, enter the barcode below.</div>
+          <video id="video" playsinline style="width:100%;border-radius:14px;border:1px solid #262b3c;background:#000;max-height:50vh"></video>
+          <div class="grid2">
             <button class="btn accent" id="startScan">▶️ Start</button>
             <button class="btn" id="stopScan" disabled>⏹️ Stop</button>
-            <button class="btn" id="flipCam">🔄 Switch camera</button>
           </div>
-          <div class="notice">Tip: hold steady and fill the frame. If scanning fails, you can enter the barcode below.</div>
           <div class="grid2">
-            <input type="text" id="manualBarcode" inputmode="numeric" pattern="[0-9]*" placeholder="Enter barcode (e.g., 060410000324)" />
+            <input type="text" id="manualBarcode" inputmode="numeric" pattern="[0-9]*" placeholder="Enter barcode" />
             <button class="btn" id="lookupBarcode">🔎 Lookup</button>
           </div>
           <div id="scanResult" class="row"></div>
         </div>
       </section>
 
-      <!-- Charts -->
+      <!-- CHARTS (detailed) -->
       <section id="screen-charts" class="card" aria-label="Charts" hidden>
         <div class="row">
-          <div class="pillbar">
-            <button class="pill active" data-chart="day">Day</button>
-            <button class="pill" data-chart="week">Week</button>
-            <button class="pill" data-chart="month">Month</button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn" data-chart="day">Day</button>
+            <button class="btn" data-chart="week">Week</button>
+            <button class="btn" data-chart="month">Month</button>
           </div>
           <canvas id="calChart" height="220"></canvas>
         </div>
       </section>
 
-      <!-- Settings -->
+      <!-- FOODS (memory) -->
+      <section id="screen-foods" class="card" aria-label="Foods" hidden>
+        <div class="row">
+          <div class="grid2">
+            <input type="text" id="foodSearch" placeholder="Search saved foods" />
+            <button class="btn" id="clearFoods">🗑️ Clear foods</button>
+          </div>
+          <div id="foodsList" class="list"></div>
+          <div id="foodsEmpty" class="empty" hidden>No saved foods yet. When you add an item, I remember its calories.</div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
       <section id="screen-settings" class="card" aria-label="Settings" hidden>
         <div class="row">
           <div class="grid2">
@@ -162,29 +159,14 @@
               <button class="btn" id="resetToday">Reset today</button>
             </div>
           </div>
-
           <div class="grid2">
-            <div class="card" style="background:#0f1420">
-              <div class="row">
-                <div style="font-weight:600">Export / Import</div>
-                <div class="muted">Backup your data (JSON) or import it onto another device.</div>
-                <div class="grid3">
-                  <button class="btn" id="exportData">⬇️ Export</button>
-                  <input type="file" id="importFile" accept="application/json" style="display:none" />
-                  <button class="btn" id="importDataBtn">⬆️ Import</button>
-                  <button class="btn danger" id="clearAll">🗑️ Clear all</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="card" style="background:#0f1420">
-              <div class="row">
-                <div style="font-weight:600">About</div>
-                <div class="muted">Data is stored locally on your device. Barcode lookups use the free Open Food Facts API.</div>
-                <div class="muted">Version <span id="appVersion">1.0.0</span></div>
-              </div>
-            </div>
+            <button class="btn" id="exportData">⬇️ Export data</button>
+            <button class="btn" id="importDataBtn">⬆️ Import data</button>
+            <input type="file" id="importFile" accept="application/json" style="display:none" />
+            <button class="btn danger" id="clearAll">🗑️ Clear all data</button>
           </div>
+          <div class="muted">About: data stays on your device. Barcode lookups use the free Open Food Facts API.</div>
+          <div class="muted">Version <span id="appVersion">1.1.0</span></div>
         </div>
       </section>
 
@@ -192,57 +174,36 @@
   </main>
 
   <nav class="bottom" aria-label="Bottom navigation">
-    <button class="active" data-screen="log">🏠 Log</button>
+    <button class="active" data-screen="home">🏠 Home</button>
     <button data-screen="scan">📷 Scan</button>
     <button data-screen="charts">📈 Charts</button>
+    <button data-screen="foods">🍽 Foods</button>
     <button data-screen="settings">⚙️ Settings</button>
   </nav>
 
-  <!-- Edit / Add dialog -->
+  <!-- Add/Edit dialog (simplified) -->
   <dialog id="entryDialog">
-    <div class="dlg">
+    <div class="dlg" style="padding:16px">
       <form id="entryForm">
         <h3 id="dlgTitle" style="margin:0 0 8px 0">Add entry</h3>
-        <div class="grid2">
+        <div class="row">
           <div>
             <label for="foodName">Food name</label>
-            <input type="text" id="foodName" placeholder="e.g., Chips (BBQ)" required />
+            <input type="text" id="foodName" list="foodNames" placeholder="e.g., Chips" required />
+            <datalist id="foodNames"></datalist>
           </div>
           <div>
-            <label for="calPerServe">Calories per serving</label>
-            <input type="number" id="calPerServe" min="0" step="1" placeholder="e.g., 150" required />
-          </div>
-        </div>
-        <div class="grid3">
-          <div>
-            <label for="quantity">Quantity (servings)</label>
-            <input type="number" id="quantity" min="0" step="0.25" value="1" required />
-          </div>
-          <div>
-            <label for="servingSize">Serving size (g/ml, optional)</label>
-            <input type="text" id="servingSize" placeholder="e.g., 30g" />
+            <label for="calories">Calories</label>
+            <input type="number" id="calories" min="0" step="1" placeholder="e.g., 150" required />
           </div>
           <div>
             <label for="when">Date & time</label>
             <input type="datetime-local" id="when" required />
           </div>
         </div>
-        <div class="grid2">
-          <div>
-            <label for="barcodeInput">Barcode (optional)</label>
-            <input type="text" id="barcodeInput" placeholder="e.g., 060410000324" />
-          </div>
-          <div>
-            <label for="notes">Notes (optional)</label>
-            <input type="text" id="notes" placeholder="e.g., small bag" />
-          </div>
-        </div>
-        <div class="row" style="justify-content:space-between;display:flex;gap:10px;margin-top:10px">
+        <div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px">
           <button type="button" class="btn" id="cancelDlg">Cancel</button>
-          <div style="display:flex;gap:10px">
-            <button type="button" class="btn" id="prefillOFF">🔎 Autofill from barcode</button>
-            <button type="submit" class="btn green" id="saveEntry">Save</button>
-          </div>
+          <button type="submit" class="btn green" id="saveEntry">Save</button>
         </div>
       </form>
     </div>
@@ -257,7 +218,6 @@
   const $ = sel => document.querySelector(sel);
   const $$ = sel => Array.from(document.querySelectorAll(sel));
   const fmtKcal = n => `${Math.round(n)} kcal`;
-  const todayISO = () => new Date().toISOString();
   const toLocalDatetime = (d) => {
     const pad = n => (n<10? '0'+n : n);
     const dt = new Date(d);
@@ -266,21 +226,42 @@
     return `${y}-${m}-${da}T${h}:${mi}`;
   }
   const uid = () => Math.random().toString(36).slice(2)+Date.now().toString(36);
+  const norm = s => (s||'').trim().toLowerCase();
 
   // ======= Storage =======
-  const STORAGE_KEY = 'cb_entries_v1';
+  const STORAGE_KEY = 'cb_entries_v1';     // existing entries
   const GOAL_KEY = 'cb_goal_v1';
+  const FOODS_KEY = 'cb_foods_v1';         // name -> {name, calories, timesUsed, lastUsedAt}
+
   let entries = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
   let dailyGoal = parseInt(localStorage.getItem(GOAL_KEY)||'2000',10);
+  let foods = JSON.parse(localStorage.getItem(FOODS_KEY)||'{}');
 
-  function saveAll(){
+  function persist(){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     localStorage.setItem(GOAL_KEY, String(dailyGoal));
+    localStorage.setItem(FOODS_KEY, JSON.stringify(foods));
     $('#dailyGoalLabel').textContent = dailyGoal;
   }
 
+  // ======= Foods memory =======
+  function rememberFood(name, calories){
+    const key = norm(name); if(!key) return; const now = Date.now();
+    const prev = foods[key]||{name: name.trim(), calories: Number(calories)||0, timesUsed:0, lastUsedAt:now};
+    foods[key] = {name: name.trim(), calories: Number(calories)||0, timesUsed:(prev.timesUsed||0)+1, lastUsedAt: now};
+    persist(); buildFoodSuggestions(); renderFoods();
+  }
+  function findFood(name){ const f = foods[norm(name)]; return f? f.calories : null; }
+  function deleteFood(name){ delete foods[norm(name)]; persist(); buildFoodSuggestions(); renderFoods(); }
+
+  function buildFoodSuggestions(){
+    const dl = $('#foodNames'); if(!dl) return; dl.innerHTML='';
+    const arr = Object.values(foods).sort((a,b)=> (b.lastUsedAt||0)-(a.lastUsedAt||0)).slice(0,50);
+    for(const f of arr){ const o = document.createElement('option'); o.value = f.name; dl.appendChild(o); }
+  }
+
   // ======= Bottom nav =======
-  const screens = ['log','scan','charts','settings'];
+  const screens = ['home','scan','charts','foods','settings'];
   function showScreen(name){
     screens.forEach(s => {
       $('#screen-'+s).hidden = s!==name;
@@ -288,47 +269,42 @@
     });
   }
 
-  // ======= Log rendering =======
-  function dateInRange(date, range){
-    const d = new Date(date); const now = new Date();
-    const start = new Date();
-    if(range==='today'){start.setHours(0,0,0,0);} 
-    else if(range==='yesterday'){start.setDate(now.getDate()-1); start.setHours(0,0,0,0);}
-    else if(range==='7d'){start.setDate(now.getDate()-6); start.setHours(0,0,0,0);} 
-    else if(range==='30d'){start.setDate(now.getDate()-29); start.setHours(0,0,0,0);} 
-    else {start.setHours(0,0,0,0);} 
-    return d>=start && d<=now;
-  }
-
+  // ======= Totals & rendering =======
   function computeTotals(){
     const now = new Date();
     const startDay = new Date(); startDay.setHours(0,0,0,0);
     const startWeek = new Date(now); const day = (now.getDay()+6)%7; // Mon=0
     startWeek.setDate(now.getDate()-day); startWeek.setHours(0,0,0,0);
     const startMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const tDay = entries.filter(e=> new Date(e.when)>=startDay).reduce((a,b)=>a+b.total,0);
-    const tWeek = entries.filter(e=> new Date(e.when)>=startWeek).reduce((a,b)=>a+b.total,0);
-    const tMonth = entries.filter(e=> new Date(e.when)>=startMonth).reduce((a,b)=>a+b.total,0);
+
+    const tDay = entries.filter(e=> new Date(e.when)>=startDay).reduce((a,b)=>a+(b.total||b.calories||0),0);
+    const tWeek = entries.filter(e=> new Date(e.when)>=startWeek).reduce((a,b)=>a+(b.total||b.calories||0),0);
+    const tMonth = entries.filter(e=> new Date(e.when)>=startMonth).reduce((a,b)=>a+(b.total||b.calories||0),0);
+
     $('#todayTotal').textContent = fmtKcal(tDay);
     $('#todayRemaining').textContent = fmtKcal(Math.max(dailyGoal - tDay, 0));
     $('#weekTotal').textContent = fmtKcal(tWeek);
     $('#monthTotal').textContent = fmtKcal(tMonth);
+
+    updateProgressChart(tDay, dailyGoal);
   }
 
-  function renderLog(range='today'){
+  function renderLog(){
     const list = $('#logList'); list.innerHTML='';
-    const filtered = entries.filter(e=>dateInRange(e.when, range)).sort((a,b)=> new Date(b.when)-new Date(a.when));
+    const start = new Date(); start.setHours(0,0,0,0);
+    const filtered = entries.filter(e=> new Date(e.when)>=start).sort((a,b)=> new Date(b.when)-new Date(a.when));
     $('#logEmpty').hidden = filtered.length>0;
     filtered.forEach(e=>{
       const el = document.createElement('div'); el.className='entry';
       const when = new Date(e.when);
+      const calories = e.calories ?? e.total ?? 0;
       el.innerHTML = `
         <div class="meta">
-          <div class="title">${e.name||'Untitled'} ${e.quantity?`×${e.quantity}`:''}</div>
-          <div class="sub">${when.toLocaleString()}${e.servingSize?` • ${e.servingSize}`:''}${e.barcode?` • ${e.barcode}`:''}</div>
+          <div class="title">${e.name||'Untitled'}</div>
+          <div class="sub">${when.toLocaleString()}</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
-          <div class="cal">${fmtKcal(e.total)}</div>
+          <div class="cal">${fmtKcal(calories)}</div>
           <button class="btn" aria-label="Edit" data-act="edit">✏️</button>
           <button class="btn danger" aria-label="Delete" data-act="del">🗑️</button>
         </div>`;
@@ -338,279 +314,178 @@
     });
   }
 
-  function addEntry(obj){
-    const entry = {
-      id: uid(),
-      name: obj.name.trim(),
-      calPerServe: Number(obj.calPerServe)||0,
-      quantity: Number(obj.quantity)||1,
-      servingSize: (obj.servingSize||'').trim(),
-      barcode: (obj.barcode||'').trim(),
-      notes: (obj.notes||'').trim(),
-      when: obj.when || todayISO(),
-      total: Math.max(0, (Number(obj.calPerServe)||0) * (Number(obj.quantity)||1))
-    };
-    entries.push(entry); saveAll(); computeTotals(); renderLog(currentRange); updateChart(activeChartRange);
+  // ======= Foods screen =======
+  function renderFoods(){
+    const wrap = $('#foodsList'); wrap.innerHTML='';
+    const q = norm($('#foodSearch').value);
+    const arr = Object.values(foods).sort((a,b)=> (b.lastUsedAt||0)-(a.lastUsedAt||0));
+    const filtered = q? arr.filter(f=> norm(f.name).includes(q)) : arr;
+    $('#foodsEmpty').hidden = filtered.length>0;
+    for(const f of filtered){
+      const row = document.createElement('div'); row.className='food-item';
+      row.innerHTML = `
+        <div>
+          <div class="food-name">${f.name}</div>
+          <div class="food-sub">${fmtKcal(f.calories)} • used ${f.timesUsed||0}×</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" data-act="quick">➕ Add</button>
+          <button class="btn" data-act="del">🗑️</button>
+        </div>`;
+      row.querySelector('[data-act="quick"]').onclick = ()=> openAddDialog({name:f.name, calories:f.calories, when:new Date()});
+      row.querySelector('[data-act="del"]').onclick = ()=> { if(confirm('Forget this saved food?')) deleteFood(f.name); };
+      wrap.appendChild(row);
+    }
   }
+  $('#foodSearch').addEventListener('input', renderFoods);
+  $('#clearFoods').onclick = ()=>{ if(confirm('Forget all saved foods?')){ foods={}; persist(); buildFoodSuggestions(); renderFoods(); }}
 
-  function updateEntry(id, updates){
-    const idx = entries.findIndex(e=>e.id===id); if(idx<0) return;
-    const e = entries[idx];
-    const merged = {...e, ...updates};
-    merged.total = Math.max(0, (Number(merged.calPerServe)||0) * (Number(merged.quantity)||1));
-    entries[idx] = merged; saveAll(); computeTotals(); renderLog(currentRange); updateChart(activeChartRange);
-  }
-
-  function deleteEntry(id){
-    if(!confirm('Delete this entry?')) return;
-    entries = entries.filter(e=>e.id!==id); saveAll(); renderLog(currentRange); computeTotals(); updateChart(activeChartRange);
-  }
-
-  // ======= Dialog =======
+  // ======= Entry CRUD =======
   const dlg = $('#entryDialog');
   function openAddDialog(prefill={}){
-    $('#dlgTitle').textContent = 'Add entry';
+    $('#dlgTitle').textContent = prefill.id? 'Edit entry' : 'Add entry';
     $('#foodName').value = prefill.name||'';
-    $('#calPerServe').value = prefill.calPerServe||'';
-    $('#quantity').value = prefill.quantity||1;
-    $('#servingSize').value = prefill.servingSize||'';
-    $('#barcodeInput').value = prefill.barcode||'';
-    $('#notes').value = prefill.notes||'';
+    $('#calories').value = (prefill.calories!=null? prefill.calories : '');
     $('#when').value = toLocalDatetime(prefill.when||new Date());
-    dlg.dataset.mode='add'; dlg.removeAttribute('data-id');
+    if(prefill.id){ dlg.dataset.mode='edit'; dlg.dataset.id=prefill.id; } else { dlg.dataset.mode='add'; dlg.removeAttribute('data-id'); }
     dlg.showModal();
   }
   function openEditDialog(id){
     const e = entries.find(x=>x.id===id); if(!e) return;
-    $('#dlgTitle').textContent = 'Edit entry';
-    $('#foodName').value = e.name;
-    $('#calPerServe').value = e.calPerServe;
-    $('#quantity').value = e.quantity;
-    $('#servingSize').value = e.servingSize||'';
-    $('#barcodeInput').value = e.barcode||'';
-    $('#notes').value = e.notes||'';
-    $('#when').value = toLocalDatetime(e.when);
-    dlg.dataset.mode='edit'; dlg.dataset.id=id;
-    dlg.showModal();
+    openAddDialog({ id:e.id, name:e.name, calories:(e.calories ?? e.total ?? 0), when:e.when });
   }
   $('#cancelDlg').onclick = ()=> dlg.close();
+
+  // Autofill calories from memory when name matches
+  $('#foodName').addEventListener('input', ()=>{
+    const val = $('#foodName').value;
+    const c = findFood(val);
+    if(c!=null && !$('#calories').value){ $('#calories').value = c; }
+  });
 
   $('#entryForm').onsubmit = (ev)=>{
     ev.preventDefault();
     const data = {
-      name: $('#foodName').value,
-      calPerServe: Number($('#calPerServe').value),
-      quantity: Number($('#quantity').value),
-      servingSize: $('#servingSize').value,
-      barcode: $('#barcodeInput').value,
-      notes: $('#notes').value,
+      name: $('#foodName').value.trim(),
+      calories: Number($('#calories').value)||0,
       when: new Date($('#when').value)
     };
-    if(dlg.dataset.mode==='edit') updateEntry(dlg.dataset.id, data); else addEntry(data);
+    if(!data.name){ alert('Please enter a name'); return; }
+
+    if(dlg.dataset.mode==='edit'){
+      const id = dlg.dataset.id; const idx = entries.findIndex(e=>e.id===id); if(idx<0) return;
+      entries[idx] = { ...entries[idx], name:data.name, calories:data.calories, total:data.calories, when:data.when };
+    } else {
+      entries.push({ id:uid(), name:data.name, calories:data.calories, total:data.calories, when:data.when });
+    }
+    rememberFood(data.name, data.calories);
+    persist(); computeTotals(); renderLog(); updateCalChart(activeChartRange);
     dlg.close();
+  }
+
+  function deleteEntry(id){
+    if(!confirm('Delete this entry?')) return;
+    entries = entries.filter(e=>e.id!==id); persist(); renderLog(); computeTotals(); updateCalChart(activeChartRange);
   }
 
   // ======= Barcode scanning & lookup =======
   let codeReader; let selectedDeviceId=null; let controls=null;
-  const cameraStatus = $('#cameraStatus');
-
-  async function listCameras(){
-    const devices = await ZXingBrowser.BrowserCodeReader.listVideoInputDevices();
-    return devices;
-  }
-
+  async function listCameras(){ return await ZXingBrowser.BrowserCodeReader.listVideoInputDevices(); }
   async function startScanner(){
     if(!codeReader) codeReader = new ZXingBrowser.BrowserMultiFormatReader();
     const devices = await listCameras();
     if(!devices.length){ alert('No camera found. Try manual barcode entry.'); return; }
-    // Prefer back camera when possible
-    if(!selectedDeviceId){
-      const back = devices.find(d=>/back|rear|environment/i.test(d.label));
-      selectedDeviceId = (back||devices[devices.length-1]).deviceId;
-    }
-    cameraStatus.textContent = 'Camera: starting…';
+    if(!selectedDeviceId){ const back = devices.find(d=>/back|rear|environment/i.test(d.label)); selectedDeviceId = (back||devices[devices.length-1]).deviceId; }
     $('#startScan').disabled = true; $('#stopScan').disabled = false;
     const videoElem = $('#video');
-    try {
-      controls = await codeReader.decodeFromVideoDevice(selectedDeviceId, videoElem, (result, err) => {
-        if(result){ onBarcode(result.getText()); }
-      });
-      cameraStatus.textContent = 'Camera: scanning';
-    } catch (e){
-      console.error(e);
-      alert('Could not start camera. Check permissions or try a different browser.');
-      cameraStatus.textContent = 'Camera: error';
-      $('#startScan').disabled = false; $('#stopScan').disabled = true;
-    }
+    try{
+      controls = await codeReader.decodeFromVideoDevice(selectedDeviceId, videoElem, (result, err)=>{ if(result){ onBarcode(result.getText()); } });
+    }catch(e){ console.error(e); alert('Could not start camera.'); $('#startScan').disabled=false; $('#stopScan').disabled=true; }
   }
-
-  function stopScanner(){
-    try{ controls && controls.stop(); }catch(e){}
-    $('#startScan').disabled = false; $('#stopScan').disabled = true; cameraStatus.textContent='Camera: stopped';
-  }
-
-  async function onBarcode(code){
-    stopScanner();
-    $('#manualBarcode').value = code;
-    await lookup(code);
-  }
-
+  function stopScanner(){ try{ controls && controls.stop(); }catch(e){} $('#startScan').disabled=false; $('#stopScan').disabled=true; }
+  async function onBarcode(code){ stopScanner(); $('#manualBarcode').value = code; await lookup(code); }
   async function lookup(code){
     if(!/^[0-9]{6,14}$/.test(code||'')) { alert('Enter a valid numeric barcode.'); return; }
-    const resBox = $('#scanResult'); resBox.innerHTML = '<div class="muted">Looking up product…</div>';
+    const resBox = $('#scanResult'); resBox.innerHTML = '<div class="muted">Looking up…</div>';
     try{
       const url = `https://world.openfoodfacts.org/api/v0/product/${encodeURIComponent(code)}.json`;
-      const resp = await fetch(url);
-      const data = await resp.json();
-      if(data.status!==1){ resBox.innerHTML = '<div class="empty">Product not found. You can still add it manually.</div>'; return; }
-      const p = data.product||{};
+      const resp = await fetch(url); const data = await resp.json();
+      if(data.status!==1){ resBox.innerHTML = '<div class="empty">Product not found. Add it manually.</div>'; return; }
+      const p = data.product||{}; const nutr = p.nutriments||{};
       const name = [p.product_name, p.brands].filter(Boolean).join(' • ') || 'Unknown product';
-      const nutr = p.nutriments||{};
       let kcalServing = Number(nutr['energy-kcal_serving']);
-      // If only per 100g is present
-      if(!kcalServing){
-        const per100 = Number(nutr['energy-kcal_100g']);
-        if(per100 && p.serving_quantity){
-          kcalServing = per100 * (Number(p.serving_quantity)/100);
-        }
-      }
-      // If only kJ available
-      if(!kcalServing){
-        const kjServing = Number(nutr['energy_serving']);
-        if(kjServing) kcalServing = kjServing/4.184;
-      }
-      // Fallback to manual
+      if(!kcalServing){ const per100 = Number(nutr['energy-kcal_100g']); if(per100 && p.serving_quantity){ kcalServing = per100 * (Number(p.serving_quantity)/100); } }
+      if(!kcalServing){ const kjServing = Number(nutr['energy_serving']); if(kjServing) kcalServing = kjServing/4.184; }
       kcalServing = Math.round(kcalServing || 0);
-
       resBox.innerHTML = '';
-      openAddDialog({
-        name,
-        calPerServe: kcalServing||'',
-        quantity: 1,
-        servingSize: p.serving_size || '',
-        barcode: code,
-      });
-    }catch(e){
-      console.error(e);
-      resBox.innerHTML = '<div class="empty">Lookup failed. Please try again later or add manually.</div>';
-    }
+      openAddDialog({ name, calories:kcalServing, when:new Date() });
+    }catch(e){ console.error(e); resBox.innerHTML = '<div class="empty">Lookup failed. Try again later or add manually.</div>'; }
   }
-
-  $('#startScan').onclick = startScanner;
-  $('#stopScan').onclick = stopScanner;
-  $('#flipCam').onclick = async ()=>{
-    const devices = await listCameras();
-    if(devices.length<2){ alert('Only one camera detected.'); return; }
-    const idx = devices.findIndex(d=>d.deviceId===selectedDeviceId);
-    selectedDeviceId = devices[(idx+1)%devices.length].deviceId; 
-    if(!$('#stopScan').disabled) startScanner();
-  };
-  $('#lookupBarcode').onclick = ()=> lookup($('#manualBarcode').value.trim());
-  $('#prefillOFF').onclick = ()=> lookup($('#barcodeInput').value.trim());
+  $('#startScan').onclick = startScanner; $('#stopScan').onclick = stopScanner; $('#lookupBarcode').onclick = ()=> lookup($('#manualBarcode').value.trim());
 
   // ======= Charts =======
-  const ctx = document.getElementById('calChart');
-  let chart;
-  let activeChartRange = 'day';
+  let progressChart, calChart; let activeChartRange='day';
+  function initProgressChart(){
+    const ctx = document.getElementById('progressChart');
+    progressChart = new Chart(ctx, { type:'doughnut', data:{ labels:['Consumed','Remaining'], datasets:[{ data:[0, dailyGoal], borderWidth:0, cutout:'70%' }]}, options:{ plugins:{legend:{display:false}}, maintainAspectRatio:false } });
+    // Center text plugin
+    Chart.register({ id:'centerText', afterDraw(chart, args, opts){ const {ctx, chartArea:{width,height}} = chart; ctx.save(); ctx.font='700 22px system-ui'; ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle'; const total = chart.data.datasets[0].data[0]; ctx.fillText(`${Math.round(total)} kcal`, chart.getDatasetMeta(0).data[0].x, chart.getDatasetMeta(0).data[0].y); ctx.restore(); }});
+  }
+  function updateProgressChart(consumed, goal){
+    if(!progressChart) return; const remaining = Math.max(goal - consumed, 0);
+    progressChart.data.datasets[0].data = [Math.max(consumed,0), remaining]; progressChart.update();
+  }
 
   function bucketize(range){
     const now = new Date();
     if(range==='day'){
-      // hourly
       const labels = Array.from({length:24}, (_,h)=> h+':00');
       const values = Array(24).fill(0);
-      entries.forEach(e=>{
-        const d=new Date(e.when);
-        if(d.toDateString()===now.toDateString()){
-          values[d.getHours()] += e.total;
-        }
-      });
+      entries.forEach(e=>{ const d=new Date(e.when); if(d.toDateString()===now.toDateString()){ values[d.getHours()] += (e.total||e.calories||0); }});
       return {labels, values};
     }
     if(range==='week'){
-      // last 7 days
       const labels=[]; const values=[];
-      for(let i=6;i>=0;i--){
-        const d=new Date(); d.setDate(d.getDate()-i); d.setHours(0,0,0,0);
+      for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); d.setHours(0,0,0,0);
         labels.push(d.toLocaleDateString(undefined,{weekday:'short'}));
-        const sum = entries.filter(e=>{ const de=new Date(e.when); const ds=new Date(d); const de0=new Date(de.getFullYear(),de.getMonth(),de.getDate()); return de0.getTime()===ds.getTime();}).reduce((a,b)=>a+b.total,0);
-        values.push(sum);
-      }
+        const sum = entries.filter(e=>{ const de=new Date(e.when); const ds=new Date(d); const de0=new Date(de.getFullYear(),de.getMonth(),de.getDate()); return de0.getTime()===ds.getTime();}).reduce((a,b)=>a+(b.total||b.calories||0),0);
+        values.push(sum); }
       return {labels, values};
     }
     if(range==='month'){
-      const labels=[]; const values=[];
-      const d0 = new Date(now.getFullYear(), now.getMonth(), 1);
-      const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-      for(let i=1;i<=daysInMonth;i++){
-        const d=new Date(now.getFullYear(),now.getMonth(),i);
-        labels.push(String(i));
-        const sum = entries.filter(e=>{ const de=new Date(e.when); return de.getFullYear()===d.getFullYear() && de.getMonth()===d.getMonth() && de.getDate()===d.getDate(); }).reduce((a,b)=>a+b.total,0);
-        values.push(sum);
-      }
+      const labels=[]; const values=[]; const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+      for(let i=1;i<=daysInMonth;i++){ const d=new Date(now.getFullYear(),now.getMonth(),i); labels.push(String(i)); const sum = entries.filter(e=>{ const de=new Date(e.when); return de.getFullYear()===d.getFullYear() && de.getMonth()===d.getMonth() && de.getDate()===d.getDate(); }).reduce((a,b)=>a+(b.total||b.calories||0),0); values.push(sum); }
       return {labels, values};
     }
   }
-
-  function initChart(){
-    const {labels, values} = bucketize('day');
-    chart = new Chart(ctx, {
-      type:'bar',
-      data:{ labels, datasets:[{ label:'Calories', data: values }]},
-      options:{
-        responsive:true,
-        plugins:{ legend:{display:false} },
-        scales:{ y:{ beginAtZero:true, title:{display:true,text:'kcal'} } }
-      }
-    });
-  }
-  function updateChart(range){
-    activeChartRange = range;
-    const {labels, values} = bucketize(range);
-    chart.data.labels = labels; chart.data.datasets[0].data = values; chart.update();
-  }
+  function initCalChart(){ const ctx = document.getElementById('calChart'); const {labels, values} = bucketize('day'); calChart = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'Calories', data: values }]}, options:{ responsive:true, plugins:{ legend:{display:false} }, scales:{ y:{ beginAtZero:true, title:{display:true,text:'kcal'} } } }}); }
+  function updateCalChart(range){ activeChartRange=range; const {labels, values} = bucketize(range); calChart.data.labels=labels; calChart.data.datasets[0].data=values; calChart.update(); }
 
   // ======= Settings & actions =======
-  $('#saveGoal').onclick = ()=>{ dailyGoal = Math.max(500, Number($('#dailyGoal').value||2000)); saveAll(); computeTotals(); };
-  $('#resetToday').onclick = ()=>{
-    if(!confirm('Remove all of today\'s entries?')) return;
-    const start = new Date(); start.setHours(0,0,0,0);
-    entries = entries.filter(e=> new Date(e.when) < start);
-    saveAll(); renderLog(currentRange); computeTotals(); updateChart(activeChartRange);
-  };
-  $('#exportData').onclick = ()=>{
-    const blob = new Blob([JSON.stringify({entries,dailyGoal},null,2)], {type:'application/json'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'calorie-buddy-backup.json'; a.click();
-  };
+  $('#saveGoal').onclick = ()=>{ dailyGoal = Math.max(500, Number($('#dailyGoal').value||2000)); persist(); computeTotals(); };
+  $('#resetToday').onclick = ()=>{ if(!confirm('Remove all of today\'s entries?')) return; const start = new Date(); start.setHours(0,0,0,0); entries = entries.filter(e=> new Date(e.when) < start); persist(); renderLog(); computeTotals(); updateCalChart(activeChartRange); };
+  $('#exportData').onclick = ()=>{ const blob = new Blob([JSON.stringify({entries,dailyGoal,foods},null,2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'calorie-buddy-backup.json'; a.click(); };
   $('#importDataBtn').onclick = ()=> $('#importFile').click();
-  $('#importFile').onchange = (ev)=>{
-    const f = ev.target.files[0]; if(!f) return; const reader=new FileReader();
-    reader.onload = ()=>{
-      try{ const obj = JSON.parse(reader.result); if(obj.entries){ entries = obj.entries; } if(obj.dailyGoal){ dailyGoal = obj.dailyGoal; $('#dailyGoal').value=dailyGoal; }
-        saveAll(); renderLog(currentRange); computeTotals(); updateChart(activeChartRange);
-      }catch(e){ alert('Invalid file.'); }
-    }; reader.readAsText(f);
-  }
-  $('#clearAll').onclick = ()=>{ if(confirm('This will erase all entries. Continue?')){ entries=[]; saveAll(); renderLog(currentRange); computeTotals(); updateChart(activeChartRange);} };
+  $('#importFile').onchange = (ev)=>{ const f = ev.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload = ()=>{ try{ const obj = JSON.parse(reader.result); if(obj.entries){ entries = obj.entries; } if(obj.dailyGoal){ dailyGoal = obj.dailyGoal; } if(obj.foods){ foods = obj.foods; } persist(); buildFoodSuggestions(); renderFoods(); renderLog(); computeTotals(); updateCalChart(activeChartRange); }catch(e){ alert('Invalid file.'); } }; reader.readAsText(f); };
+  $('#clearAll').onclick = ()=>{ if(confirm('This will erase all entries & foods. Continue?')){ entries=[]; foods={}; persist(); buildFoodSuggestions(); renderFoods(); renderLog(); computeTotals(); updateCalChart(activeChartRange);} };
 
   // ======= Wire up UI =======
-  let currentRange='today';
-  $$('#screen-log .pill').forEach(p=> p.onclick = ()=>{ $$('#screen-log .pill').forEach(x=>x.classList.remove('active')); p.classList.add('active'); currentRange=p.dataset.range; renderLog(currentRange); });
-  $$('#screen-charts .pill').forEach(p=> p.onclick = ()=>{ $$('#screen-charts .pill').forEach(x=>x.classList.remove('active')); p.classList.add('active'); updateChart(p.dataset.chart); });
-  $('nav.bottom').addEventListener('click', (e)=>{
-    const btn = e.target.closest('button[data-screen]'); if(!btn) return; showScreen(btn.dataset.screen);
-  });
-
+  $('nav.bottom').addEventListener('click', (e)=>{ const btn = e.target.closest('button[data-screen]'); if(!btn) return; showScreen(btn.dataset.screen); });
   $('#addQuick').onclick = ()=> openAddDialog({when:new Date()});
-  $('#addCustom').onclick = ()=> openAddDialog({when:new Date()});
   $('#scanSwitch').onclick = ()=> showScreen('scan');
+
+  // Chart range buttons
+  $$('#screen-charts [data-chart]').forEach(b=> b.onclick = ()=>{ $$('#screen-charts [data-chart]').forEach(x=>x.classList.remove('primary')); b.classList.add('primary'); updateCalChart(b.dataset.chart); });
 
   // ======= Boot =======
   function boot(){
     $('#dailyGoal').value = dailyGoal; $('#dailyGoalLabel').textContent = dailyGoal;
-    computeTotals(); renderLog('today'); initChart();
+    buildFoodSuggestions(); renderFoods(); renderLog();
+    initProgressChart(); computeTotals();
+    initCalChart(); updateCalChart('day');
+    showScreen('home');
   }
-  document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible'){ computeTotals(); renderLog(currentRange); updateChart(activeChartRange);} });
+  document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible'){ computeTotals(); renderLog(); updateCalChart(activeChartRange);} });
   boot();
   </script>
 </body>
