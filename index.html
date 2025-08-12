@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🍎</text></svg>">
   <style>
     :root{
-      --bg:#0b0c10; --panel:#111318; --muted:#a6adbb; --text:#f6f7f9; --accent:#60a5fa; --danger:#ef4444;
+      --bg:#0b0c10; --panel:#111318; --muted:#a6adbb; --text:#f6f7f9; --accent:#60a5fa; --danger:#ef4444; --ok:#10b981;
       --radius:18px; --pad:12px; --tap:16px;
     }
     *{box-sizing:border-box; min-width:0}
@@ -21,16 +21,16 @@
 
     main{padding-bottom:86px}
 
-    .container{max-width:840px;margin:0 auto;padding:12px; width:100%; overflow-x:hidden}
+    .container{max-width:900px;margin:0 auto;padding:12px; width:100%; overflow-x:hidden}
     .card{background:var(--panel);border:1px solid #1f2330;border-radius:var(--radius);padding:var(--pad);box-shadow:0 10px 30px rgba(0,0,0,.25); overflow:hidden}
     .row{display:grid;gap:10px}
 
     .muted{color:var(--muted)}
     label{font-size:14px;color:var(--muted);display:block;margin-bottom:6px}
-    input,button{font:inherit}
-    input[type="text"],input[type="number"],input[type="datetime-local"]{width:100%;padding:14px;border-radius:14px;border:1px solid #2a3242;background:#0e121b;color:var(--text);font-size:16px}
+    input,button,select{font:inherit}
+    input[type="text"],input[type="number"],input[type="datetime-local"],select{width:100%;padding:14px;border-radius:14px;border:1px solid #2a3242;background:#0e121b;color:var(--text);font-size:16px}
 
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;border-radius:14px;border:1px solid #2a3242;background:#0e121b;color:var(--text);cursor:pointer;font-weight:600}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 14px;border-radius:14px;border:1px solid #2a3242;background:#0e121b;color:var(--text);cursor:pointer;font-weight:600}
     .btn.primary{background:linear-gradient(180deg,#1f2937,#111827);border-color:#2a3242}
     .btn.accent{background:linear-gradient(180deg,#0ea5e9,#0284c7);border-color:#0891b2;color:#fff}
     .btn.green{background:linear-gradient(180deg,#10b981,#059669);border-color:#047857;color:#fff}
@@ -59,13 +59,17 @@
     .v{font-size:20px;font-weight:800}
     .hide-xs{display:none}
 
-    /* Log panel scroll to reduce page length */
+    /* Log panel to keep page short */
     .log-panel{max-height:40vh;overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid #23283a;border-radius:14px;padding:8px;background:#0f1420}
 
     /* Foods page */
     .food-item{display:flex;align-items:center;justify-content:space-between;background:#0f1420;border:1px solid #23283a;border-radius:14px;padding:12px}
+    .food-left{display:flex;align-items:center;gap:10px}
+    .food-ico{font-size:20px;line-height:1}
     .food-name{font-weight:700}
     .food-sub{font-size:12px;color:var(--muted)}
+    .food-row-right{display:flex;gap:8px;align-items:center}
+    .catSelect{width:auto;padding:8px 10px}
 
     /* Media queries */
     @media(min-width:760px){
@@ -96,7 +100,6 @@
       <!-- HOME -->
       <section id="screen-home" class="card" aria-label="Home">
         <div class="row">
-          <!-- Compact progress at the very top: ring + key stats side-by-side -->
           <div class="progress-card">
             <div class="ring-wrap">
               <canvas id="progressChart"></canvas>
@@ -113,7 +116,6 @@
             </div>
           </div>
 
-          <!-- Today's log in a scrollable panel so the page itself stays short -->
           <div>
             <div style="font-weight:700;margin:2px 0 6px 0;display:flex;align-items:center;justify-content:space-between">
               <span>Today's log</span>
@@ -148,11 +150,12 @@
       <section id="screen-charts" class="card" aria-label="Charts" hidden>
         <div class="row">
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn" data-chart="day">Day</button>
+            <button class="btn primary" data-chart="day">Day</button>
             <button class="btn" data-chart="week">Week</button>
             <button class="btn" data-chart="month">Month</button>
           </div>
-          <canvas id="calChart" height="220"></canvas>
+          <canvas id="calChart" height="240"></canvas>
+          <div class="muted">Tip: the faint dashed line marks your daily goal.</div>
         </div>
       </section>
 
@@ -161,7 +164,16 @@
         <div class="row">
           <div class="grid2">
             <input type="text" id="foodSearch" placeholder="Search saved foods" />
-            <button class="btn" id="clearFoods">🗑️ Clear foods</button>
+            <div class="grid2">
+              <select id="filterCategory">
+                <option value="all">All categories</option>
+              </select>
+              <select id="sortFoods">
+                <option value="recent">Sort: Recent</option>
+                <option value="name">Sort: Name A–Z</option>
+                <option value="category">Sort: Category</option>
+              </select>
+            </div>
           </div>
           <div id="foodsList" class="list"></div>
           <div id="foodsEmpty" class="empty" hidden>No saved foods yet. When you add an item, I remember its calories.</div>
@@ -188,7 +200,7 @@
             <button class="btn danger" id="clearAll">🗑️ Clear all data</button>
           </div>
           <div class="muted">About: data stays on your device. Barcode lookups use the free Open Food Facts API.</div>
-          <div class="muted">Version <span id="appVersion">1.1.2</span></div>
+          <div class="muted">Version <span id="appVersion">1.2.0</span></div>
         </div>
       </section>
 
@@ -250,10 +262,33 @@
   const uid = () => Math.random().toString(36).slice(2)+Date.now().toString(36);
   const norm = s => (s||'').trim().toLowerCase();
 
+  // ======= Categories & icons =======
+  const CATEGORIES = ['Meals','Snacks','Drinks','Fruit','Veggies','Dairy','Grains','Sweets','Fast Food','Other'];
+  const CAT_ICON = {
+    'Meals':'🍽️','Snacks':'🥨','Drinks':'🥤','Fruit':'🍎','Veggies':'🥕','Dairy':'🧀','Grains':'🌾','Sweets':'🍫','Fast Food':'🍔','Other':'🔖'
+  };
+  const KEYWORDS = [
+    ['Meals',['meal','rice','pasta','noodle','curry','stew','soup','bowl','plate','wrap','sandwich','salad','omelet','eggs','chicken','beef','pork','fish','tofu'] ],
+    ['Snacks',['snack','chips','crisps','nuts','trail','granola','bar','popcorn','cracker','pretzel','cookie'] ],
+    ['Drinks',['drink','soda','cola','juice','water','coffee','latte','tea','milkshake','energy','gatorade'] ],
+    ['Fruit',['apple','banana','berry','orange','grape','mango','kiwi','pear','peach','fruit'] ],
+    ['Veggies',['salad','veg','vegetable','carrot','broccoli','spinach','kale','lettuce','pepper'] ],
+    ['Dairy',['milk','yogurt','cheese','butter','cream'] ],
+    ['Grains',['bread','bagel','tortilla','oat','cereal','rice','quinoa'] ],
+    ['Sweets',['candy','chocolate','cake','donut','doughnut','ice cream','dessert','muffin'] ],
+    ['Fast Food',['burger','fries','pizza','taco','kebab','nugget','hot dog'] ],
+  ];
+  function inferCategory(name){
+    const s = norm(name);
+    for(const [cat, words] of KEYWORDS){ if(words.some(w=> s.includes(w))) return cat; }
+    return 'Other';
+  }
+  function iconFor(cat){ return CAT_ICON[cat] || CAT_ICON['Other']; }
+
   // ======= Storage =======
   const STORAGE_KEY = 'cb_entries_v1';     // entries
   const GOAL_KEY = 'cb_goal_v1';
-  const FOODS_KEY = 'cb_foods_v1';         // name -> {name, calories, timesUsed, lastUsedAt}
+  const FOODS_KEY = 'cb_foods_v1';         // name -> {name, calories, timesUsed, lastUsedAt, category}
 
   let entries = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
   let dailyGoal = parseInt(localStorage.getItem(GOAL_KEY)||'2000',10);
@@ -269,11 +304,12 @@
   // ======= Foods memory =======
   function rememberFood(name, calories){
     const key = norm(name); if(!key) return; const now = Date.now();
-    const prev = foods[key]||{name: name.trim(), calories: Number(calories)||0, timesUsed:0, lastUsedAt:now};
-    foods[key] = {name: name.trim(), calories: Number(calories)||0, timesUsed:(prev.timesUsed||0)+1, lastUsedAt: now};
+    const prev = foods[key]||{name: name.trim(), calories: Number(calories)||0, timesUsed:0, lastUsedAt:now, category: inferCategory(name)};
+    foods[key] = {name: name.trim(), calories: Number(calories)||0, timesUsed:(prev.timesUsed||0)+1, lastUsedAt: now, category: prev.category || inferCategory(name)};
     persist(); buildFoodSuggestions(); renderFoods();
   }
   function findFood(name){ const f = foods[norm(name)]; return f? f.calories : null; }
+  function setFoodCategory(name, cat){ const f = foods[norm(name)]; if(!f) return; f.category = cat; persist(); renderFoods(); buildFoodSuggestions(); }
   function deleteFood(name){ delete foods[norm(name)]; persist(); buildFoodSuggestions(); renderFoods(); }
 
   function buildFoodSuggestions(){
@@ -337,30 +373,54 @@
   }
 
   // ======= Foods screen =======
+  function ensureCategoryOptions(){
+    const sel = $('#filterCategory'); if(sel && sel.options.length<=1){
+      for(const c of CATEGORIES){ const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o);} }
+  }
   function renderFoods(){
+    ensureCategoryOptions();
     const wrap = $('#foodsList'); wrap.innerHTML='';
     const q = norm($('#foodSearch').value);
-    const arr = Object.values(foods).sort((a,b)=> (b.lastUsedAt||0)-(a.lastUsedAt||0));
-    const filtered = q? arr.filter(f=> norm(f.name).includes(q)) : arr;
-    $('#foodsEmpty').hidden = filtered.length>0;
-    for(const f of filtered){
+    const filterCat = $('#filterCategory').value;
+    const sortMode = $('#sortFoods').value;
+
+    let arr = Object.values(foods);
+    // filter
+    if(filterCat && filterCat!=='all') arr = arr.filter(f=> (f.category||'Other')===filterCat);
+    if(q) arr = arr.filter(f=> norm(f.name).includes(q));
+    // sort
+    if(sortMode==='recent') arr.sort((a,b)=> (b.lastUsedAt||0)-(a.lastUsedAt||0));
+    if(sortMode==='name') arr.sort((a,b)=> norm(a.name).localeCompare(norm(b.name)));
+    if(sortMode==='category') arr.sort((a,b)=> (CATEGORIES.indexOf(a.category||'Other') - CATEGORIES.indexOf(b.category||'Other')) || norm(a.name).localeCompare(norm(b.name)) );
+
+    $('#foodsEmpty').hidden = arr.length>0;
+    for(const f of arr){
       const row = document.createElement('div'); row.className='food-item';
+      const cat = f.category || 'Other';
       row.innerHTML = `
-        <div>
-          <div class="food-name">${f.name}</div>
-          <div class="food-sub">${fmtKcal(f.calories)} • used ${f.timesUsed||0}×</div>
+        <div class="food-left">
+          <div class="food-ico">${iconFor(cat)}</div>
+          <div>
+            <div class="food-name">${f.name}</div>
+            <div class="food-sub">${fmtKcal(f.calories)} • ${cat} • used ${f.timesUsed||0}×</div>
+          </div>
         </div>
-        <div style="display:flex;gap:8px">
+        <div class="food-row-right">
+          <select class="catSelect" data-name="${f.name}"></select>
           <button class="btn" data-act="quick">➕ Add</button>
           <button class="btn" data-act="del">🗑️</button>
         </div>`;
+      const sel = row.querySelector('.catSelect');
+      for(const c of CATEGORIES){ const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o);} sel.value = cat;
+      sel.onchange = (e)=> setFoodCategory(f.name, e.target.value);
       row.querySelector('[data-act="quick"]').onclick = ()=> openAddDialog({name:f.name, calories:f.calories, when:new Date()});
       row.querySelector('[data-act="del"]').onclick = ()=> { if(confirm('Forget this saved food?')) deleteFood(f.name); };
       wrap.appendChild(row);
     }
   }
   $('#foodSearch').addEventListener('input', renderFoods);
-  $('#clearFoods').onclick = ()=>{ if(confirm('Forget all saved foods?')){ foods={}; persist(); buildFoodSuggestions(); renderFoods(); }}
+  $('#filterCategory').addEventListener('change', renderFoods);
+  $('#sortFoods').addEventListener('change', renderFoods);
 
   // ======= Entry CRUD =======
   const dlg = $('#entryDialog');
@@ -447,8 +507,14 @@
 
   // ======= Charts =======
   let progressChart, calChart; let activeChartRange='day';
-  // Center text plugin
-  Chart.register({ id:'centerText', afterDraw(chart){ try{ const {ctx} = chart; const meta = chart.getDatasetMeta(0).data[0]; if(!meta) return; ctx.save(); ctx.font='700 18px system-ui'; ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle'; const total = chart.data.datasets[0].data[0]||0; ctx.fillText(`${Math.round(total)} kcal`, meta.x, meta.y); ctx.restore(); }catch(_){} }});
+  // Center text plugin (only for doughnut)
+  Chart.register({ id:'centerText', afterDraw(chart){ try{ if(chart.config.type!=='doughnut') return; const {ctx} = chart; const meta = chart.getDatasetMeta(0).data[0]; if(!meta) return; ctx.save(); ctx.font='700 18px system-ui'; ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle'; const total = chart.data.datasets[0].data[0]||0; ctx.fillText(`${Math.round(total)} kcal`, meta.x, meta.y); ctx.restore(); }catch(_){} }});
+  // Goal line plugin for bar charts
+  Chart.register({ id:'goalLine', afterDatasetsDraw(chart, args, pluginOptions){ try{
+      if(chart.config.type!=='bar') return; const y = chart.scales?.y?.getPixelForValue(pluginOptions?.yValue); if(!y) return; const {ctx, chartArea:{left,right}} = chart;
+      ctx.save(); ctx.strokeStyle = pluginOptions?.color || '#9aa1ac66'; ctx.setLineDash([6,4]); ctx.beginPath(); ctx.moveTo(left, y); ctx.lineTo(right, y); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = pluginOptions?.textColor || '#9aa1ac'; ctx.font='600 12px system-ui'; ctx.textAlign='right'; ctx.fillText('Goal', right-6, y-6); ctx.restore();
+    }catch(_){} } });
 
   function initProgressChart(){
     const ctx = document.getElementById('progressChart');
@@ -481,11 +547,26 @@
       return {labels, values};
     }
   }
-  function initCalChart(){ const ctx = document.getElementById('calChart'); const {labels, values} = bucketize('day'); calChart = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'Calories', data: values }]}, options:{ responsive:true, plugins:{ legend:{display:false} }, scales:{ y:{ beginAtZero:true, title:{display:true,text:'kcal'} } } }}); }
-  function updateCalChart(range){ activeChartRange=range; const {labels, values} = bucketize(range); calChart.data.labels=labels; calChart.data.datasets[0].data=values; calChart.update(); }
+  function initCalChart(){
+    const ctx = document.getElementById('calChart');
+    const {labels, values} = bucketize('day');
+    calChart = new Chart(ctx, {
+      type:'bar',
+      data:{ labels, datasets:[{ label:'Calories', data: values, borderRadius: 6, maxBarThickness: 32 }]},
+      options:{
+        responsive:true,
+        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(ctx)=> `${Math.round(ctx.parsed.y)} kcal` } }, goalLine:{ yValue: dailyGoal } },
+        scales:{
+          x:{ grid:{ display:false } },
+          y:{ beginAtZero:true, title:{display:true,text:'kcal'}, grid:{ color:'#1f2330' } }
+        }
+      }
+    });
+  }
+  function updateCalChart(range){ activeChartRange=range; const {labels, values} = bucketize(range); calChart.data.labels=labels; calChart.data.datasets[0].data=values; calChart.options.plugins.goalLine.yValue = dailyGoal; calChart.update(); }
 
   // ======= Settings & actions =======
-  $('#saveGoal').onclick = ()=>{ dailyGoal = Math.max(500, Number($('#dailyGoal').value||2000)); persist(); computeTotals(); };
+  $('#saveGoal').onclick = ()=>{ dailyGoal = Math.max(500, Number($('#dailyGoal').value||2000)); persist(); computeTotals(); if(calChart){ calChart.options.plugins.goalLine.yValue = dailyGoal; calChart.update(); } };
   $('#resetToday').onclick = ()=>{ if(!confirm('Remove all of today\'s entries?')) return; const start = new Date(); start.setHours(0,0,0,0); entries = entries.filter(e=> new Date(e.when) < start); persist(); renderLog(); computeTotals(); updateCalChart(activeChartRange); };
   $('#exportData').onclick = ()=>{ const blob = new Blob([JSON.stringify({entries,dailyGoal,foods},null,2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'calorie-buddy-backup.json'; a.click(); };
   $('#importDataBtn').onclick = ()=> $('#importFile').click();
@@ -502,6 +583,8 @@
 
   // ======= Boot =======
   function boot(){
+    // Ensure all category options exist
+    ensureCategoryOptions();
     $('#dailyGoal').value = dailyGoal; $('#dailyGoalLabel').textContent = dailyGoal;
     buildFoodSuggestions(); renderFoods(); renderLog();
     initProgressChart(); computeTotals();
