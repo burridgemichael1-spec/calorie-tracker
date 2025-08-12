@@ -9,7 +9,7 @@
   <style>
     :root{
       --bg:#0b0c10; --panel:#111318; --muted:#a6adbb; --text:#f6f7f9; --accent:#60a5fa; --danger:#ef4444;
-      --radius:18px; --pad:14px; --tap:16px;
+      --radius:18px; --pad:12px; --tap:16px;
     }
     *{box-sizing:border-box; min-width:0}
     html,body{height:100%; width:100%; overflow-x:hidden}
@@ -23,12 +23,12 @@
 
     .container{max-width:840px;margin:0 auto;padding:12px; width:100%; overflow-x:hidden}
     .card{background:var(--panel);border:1px solid #1f2330;border-radius:var(--radius);padding:var(--pad);box-shadow:0 10px 30px rgba(0,0,0,.25); overflow:hidden}
-    .row{display:grid;gap:12px}
+    .row{display:grid;gap:10px}
 
     .muted{color:var(--muted)}
     label{font-size:14px;color:var(--muted);display:block;margin-bottom:6px}
     input,button{font:inherit}
-    input[type="text"],input[type="number"],input[type="datetime-local"]{width:100%;padding:16px;border-radius:14px;border:1px solid #2a3242;background:#0e121b;color:var(--text);font-size:16px}
+    input[type="text"],input[type="number"],input[type="datetime-local"]{width:100%;padding:14px;border-radius:14px;border:1px solid #2a3242;background:#0e121b;color:var(--text);font-size:16px}
 
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;border-radius:14px;border:1px solid #2a3242;background:#0e121b;color:var(--text);cursor:pointer;font-weight:600}
     .btn.primary{background:linear-gradient(180deg,#1f2937,#111827);border-color:#2a3242}
@@ -38,7 +38,7 @@
     .btn:active{transform:translateY(1px)}
     .btn:disabled{opacity:.6;cursor:not-allowed}
 
-    .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+    .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
     .list{display:grid;gap:10px}
     .entry{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #23283a;border-radius:14px;background:#0f1420}
     .entry .meta{display:flex;flex-direction:column;gap:4px}
@@ -52,11 +52,15 @@
     nav.bottom button.active{color:var(--text)}
 
     /* Home progress */
-    .progress-wrap{display:grid;grid-template-columns:1fr;gap:12px}
-    .progress-card{display:grid;grid-template-columns:1fr;gap:16px;align-items:center}
-    .progress-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .progress-card{display:grid;grid-template-columns:140px 1fr;gap:12px;align-items:center}
+    .ring-wrap{width:140px;height:140px;justify-self:center}
+    .progress-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
     .k{font-size:12px;color:var(--muted)}
-    .v{font-size:22px;font-weight:800}
+    .v{font-size:20px;font-weight:800}
+    .hide-xs{display:none}
+
+    /* Log panel scroll to reduce page length */
+    .log-panel{max-height:40vh;overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid #23283a;border-radius:14px;padding:8px;background:#0f1420}
 
     /* Foods page */
     .food-item{display:flex;align-items:center;justify-content:space-between;background:#0f1420;border:1px solid #23283a;border-radius:14px;padding:12px}
@@ -65,15 +69,16 @@
 
     /* Media queries */
     @media(min-width:760px){
-      .progress-card{grid-template-columns:340px 1fr}
-      .progress-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .progress-card{grid-template-columns:220px 1fr}
+      .ring-wrap{width:220px;height:220px}
+      .hide-xs{display:initial}
     }
     @media(max-width:560px){
       .grid2{grid-template-columns:1fr}
     }
 
     /* Safe sizing for media & charts */
-    canvas{display:block;max-width:100%;width:100% !important}
+    canvas{display:block;max-width:100%;width:100%}
     video{display:block;max-width:100%;height:auto;border-radius:14px;border:1px solid #262b3c;background:#000}
   </style>
 </head>
@@ -91,14 +96,16 @@
       <!-- HOME -->
       <section id="screen-home" class="card" aria-label="Home">
         <div class="row">
-          <!-- Front-and-centre daily progress -->
+          <!-- Compact progress at the very top: ring + key stats side-by-side -->
           <div class="progress-card">
-            <canvas id="progressChart" height="200"></canvas>
+            <div class="ring-wrap">
+              <canvas id="progressChart"></canvas>
+            </div>
             <div class="progress-stats">
               <div><div class="k">Today</div><div class="v" id="todayTotal">0 kcal</div></div>
               <div><div class="k">Remaining</div><div class="v" id="todayRemaining">0 kcal</div></div>
-              <div><div class="k">This week</div><div class="v" id="weekTotal">0 kcal</div></div>
-              <div><div class="k">This month</div><div class="v" id="monthTotal">0 kcal</div></div>
+              <div class="hide-xs"><div class="k">This week</div><div class="v" id="weekTotal">0 kcal</div></div>
+              <div class="hide-xs"><div class="k">This month</div><div class="v" id="monthTotal">0 kcal</div></div>
               <div class="grid2" style="grid-column:1/-1">
                 <button class="btn green" id="addQuick">➕ Add</button>
                 <button class="btn" id="scanSwitch">📷 Scan</button>
@@ -106,10 +113,16 @@
             </div>
           </div>
 
+          <!-- Today's log in a scrollable panel so the page itself stays short -->
           <div>
-            <div style="font-weight:700;margin:2px 0 6px 0">Today's log</div>
-            <div id="logList" class="list"></div>
-            <div id="logEmpty" class="empty" hidden>No items today. Tap <b>Add</b> or <b>Scan</b>.</div>
+            <div style="font-weight:700;margin:2px 0 6px 0;display:flex;align-items:center;justify-content:space-between">
+              <span>Today's log</span>
+              <button class="btn" onclick="showScreen('charts')">📈 Details</button>
+            </div>
+            <div class="log-panel">
+              <div id="logList" class="list"></div>
+              <div id="logEmpty" class="empty" hidden>No items today. Tap <b>Add</b> or <b>Scan</b>.</div>
+            </div>
           </div>
         </div>
       </section>
@@ -175,7 +188,7 @@
             <button class="btn danger" id="clearAll">🗑️ Clear all data</button>
           </div>
           <div class="muted">About: data stays on your device. Barcode lookups use the free Open Food Facts API.</div>
-          <div class="muted">Version <span id="appVersion">1.1.1</span></div>
+          <div class="muted">Version <span id="appVersion">1.1.2</span></div>
         </div>
       </section>
 
@@ -238,7 +251,7 @@
   const norm = s => (s||'').trim().toLowerCase();
 
   // ======= Storage =======
-  const STORAGE_KEY = 'cb_entries_v1';     // existing entries
+  const STORAGE_KEY = 'cb_entries_v1';     // entries
   const GOAL_KEY = 'cb_goal_v1';
   const FOODS_KEY = 'cb_foods_v1';         // name -> {name, calories, timesUsed, lastUsedAt}
 
@@ -434,8 +447,8 @@
 
   // ======= Charts =======
   let progressChart, calChart; let activeChartRange='day';
-  // Register center text plugin first
-  Chart.register({ id:'centerText', afterDraw(chart){ try{ const {ctx} = chart; const meta = chart.getDatasetMeta(0).data[0]; if(!meta) return; ctx.save(); ctx.font='700 22px system-ui'; ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle'; const total = chart.data.datasets[0].data[0]||0; ctx.fillText(`${Math.round(total)} kcal`, meta.x, meta.y); ctx.restore(); }catch(_){} }});
+  // Center text plugin
+  Chart.register({ id:'centerText', afterDraw(chart){ try{ const {ctx} = chart; const meta = chart.getDatasetMeta(0).data[0]; if(!meta) return; ctx.save(); ctx.font='700 18px system-ui'; ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle'; const total = chart.data.datasets[0].data[0]||0; ctx.fillText(`${Math.round(total)} kcal`, meta.x, meta.y); ctx.restore(); }catch(_){} }});
 
   function initProgressChart(){
     const ctx = document.getElementById('progressChart');
